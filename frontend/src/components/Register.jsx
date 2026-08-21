@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -6,6 +7,7 @@ function Register() {
   const [code, setCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const navigate = useNavigate() ;
 
   function handelEmail(e) {
     setEmail(e.target.value);
@@ -17,6 +19,7 @@ function Register() {
 
   function handelPassword(e) {
     setPassword(e.target.value);
+    navigate('/dashboard');
   }
 
   function verifyCode() {
