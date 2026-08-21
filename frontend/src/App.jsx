@@ -4,8 +4,9 @@ import Register from './components/Register'
 
 function App() {
   return (
-    <div><Login></Login>
-    <Register></Register>
+    <div>
+      <Login></Login>
+      <Register></Register>
     </div>
   )
 }
