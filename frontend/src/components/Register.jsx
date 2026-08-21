@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const [name , setName] = useState('');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const navigate = useNavigate() ;
+
+  function handelName(e){
+    setName(e.target.value);
+  }
 
   function handelEmail(e) {
     setEmail(e.target.value);
@@ -48,6 +53,16 @@ function Register() {
         <h1 className="text-3xl font-bold text-center mb-8">Register</h1>
 
         <form onSubmit={handelSubmit} className="space-y-5">
+          {/*Name */}
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            onChange={handelName}
+            value={name}
+            required
+            className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+          />
 
           {/* Email */}
           <input
