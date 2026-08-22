@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const db = require('../config/db')
 class UserModels  {
+    
     // Create User
     async createUser(name , email ,password ) {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -10,45 +11,50 @@ class UserModels  {
             email ,
             hashedPassword ,
         ]
-        db.query(sql,[values],(err,result) => {
-            if(err){
-                console.log(err);
-                return;
-            }
-            console.log("Created Sussfully");
-            console.log(result);
+        return new Promise((resolve, reject) => {
+            db.query(sql,values,(err,result) => {
+                if(err){
+                    reject(err);
+                    return;
+                }
+                console.log("Created Sussfully");
+                resolve(result);
+            });
         });
     }
     // login User
    async login(email ,password) {
 
-    const sql = "SELECT * FROM login WHERE email = ?"
+    const sql = "SELECT * FROM login WHERE email = ?";
 
-    db.query(sql, [email], async(err,result) =>{
+    return new Promise((resolve, reject) => {
 
-        if(err){
-            console.log(err);
-            return;
-        }
+        db.query(sql, [email], async(err,result) =>{
 
-        if(result.length===0){
-            console.log("Invalid email pr Password");
-            return ;
-        }
+            if(err){
+                reject(err);
+                return;
+            }
 
-        const user = result[0] ;
+            if(result.length===0){
+                resolve(false);
+                return ;
+            }
 
-        const isMatch = await bcrypt.compare(
-            password ,
-            user.password
-        );
+            const user = result[0] ;
 
-        if(!isMatch){
-            console.log("Invalid Email or Password");
-            return;
-        }
+            const isMatch = await bcrypt.compare(
+                password ,
+                user.password
+            );
 
-        console.log("Logined");
+            if(!isMatch){
+                resolve(false);
+                return;
+            }
+
+            resolve(true);
+        });
     });
    }
 }
