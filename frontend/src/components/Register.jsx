@@ -24,7 +24,6 @@ function Register() {
 
   function handelPassword(e) {
     setPassword(e.target.value);
-    navigate('/dashboard');
   }
 
   function verifyCode() {
@@ -37,14 +36,36 @@ function Register() {
     }
   }
 
-  function handelSubmit(e) {
+  async function handelSubmit(e) {
     e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:5000/register' , {
+        method: "POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify ({
+          name:name,
+          email:email,
+          password:password
+        })
+      });
 
-    console.log({
-      email,
-      password,
-      code,
-    });
+      const data =await response.json();
+
+      console.log(data);
+
+      if (response.ok) {
+      alert(data.message);
+      navigate("/login");
+    } else {
+      alert(data.message);
+    }
+
+    }catch(err){
+      console.log(console.log(err));
+      alert("Unable to connect to server");
+    }
   }
 
   return (
@@ -128,6 +149,18 @@ function Register() {
             </button>
           )}
         </form>
+        {/* Login Link */}
+        <p className="text-center text-gray-600 mt-6">
+          Already have an account?{" "}
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="text-indigo-600 font-semibold hover:underline"
+          >
+            Log in
+          </button>
+        </p>
+
       </div>
     </div>
   );

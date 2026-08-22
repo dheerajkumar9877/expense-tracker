@@ -17,7 +17,34 @@ function Login() {
 
   async function handelSubmit(e) {
     e.preventDefault();
-    navigate('/dashboard');
+
+    try{
+      const response = await fetch("http://localhost:5000/login",{
+        method: "POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+          email:email,
+          password:password
+        })
+      });
+
+      const data = await response.json() ;
+
+      console.log(data);
+
+      if (response.ok) {
+      alert(data.message);
+      navigate("/dashboard");
+    } else {
+      alert(data.message);
+    }
+
+  }catch(err){
+      console.log(err);
+      alert("Unable to connect to server");
+    }
   }
 
   return (
@@ -83,7 +110,7 @@ function Login() {
 
             <div className="flex justify-end">
               <a
-                href="/forget-password"
+                href="/forget"
                 className="text-sm text-indigo-600 hover:underline"
               >
                 Forgot Password?
